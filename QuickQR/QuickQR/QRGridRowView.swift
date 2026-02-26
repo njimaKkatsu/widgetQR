@@ -1,6 +1,39 @@
 import SwiftUI
 
-// MARK: グリッドアイテム配置
+// MARK: - グリッド表示関連
+
+// MARK: グリッド本体
+struct StaticGrid: View {
+    @Binding var items: [QRGridItemModel]
+    let selectedSwapItemID: UUID?
+    let lastSwappedIDs: Set<UUID>
+    let selectedItems: Set<UUID>
+    let onItemTap: (QRGridItemModel) -> Void
+    let onItemLongPress: (QRGridItemModel) -> Void
+    let columns: Int
+
+    var body: some View {
+        VStack(spacing: 16) {
+            let rows = stride(from: 0, to: items.count, by: columns).map {
+                Array(items[$0..<min($0 + columns, items.count)])
+            }
+
+            ForEach(rows.indices, id: \.self) { index in
+                QRGridRowView(
+                    items: rows[index],
+                    selectedSwapItemID: selectedSwapItemID,
+                    lastSwappedIDs: lastSwappedIDs,
+                    selectedItems: selectedItems,
+                    onItemTap: onItemTap,
+                    onItemLongPress: onItemLongPress,
+                    columns: columns
+                )
+            }
+        }
+    }
+}
+
+// MARK: グリッドアイテム配置（行単位）
 struct QRGridRowView: View {
     let items: [QRGridItemModel]
     let selectedSwapItemID: UUID?
@@ -21,7 +54,6 @@ struct QRGridRowView: View {
                     onTap: { onItemTap(item) },
                     onLongPress: { onItemLongPress(item) }
                 )
-                // 各アイテムが均等な1/4幅
                 .frame(maxWidth: .infinity)
                 .buttonStyle(PlainButtonStyle())
                 .contentShape(Rectangle())
@@ -29,11 +61,11 @@ struct QRGridRowView: View {
             }
 
             if items.count < columns {
-                            ForEach(0..<(columns - items.count), id: \.self) { _ in
-                                Color.clear
-                                    .frame(maxWidth: .infinity)
-                            }
-                        }
+                ForEach(0..<(columns - items.count), id: \.self) { _ in
+                    Color.clear
+                        .frame(maxWidth: .infinity)
+                }
+            }
         }
         .padding(.horizontal, 4)
     }

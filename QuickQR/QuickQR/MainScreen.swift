@@ -2,162 +2,6 @@ import SwiftUI
 import UIKit
 import WidgetKit
 
-// MARK: 保存処理
-func saveQRImageToAppGroup(_ image: UIImage) {
-    // リサイズ処理（ウィジェット制限を回避）
-    let targetSize = CGSize(width: 400, height: 400)
-    let format = UIGraphicsImageRendererFormat()
-    format.scale = 1
-    let renderer = UIGraphicsImageRenderer(size: targetSize, format: format)
-    
-    let resizedImage = renderer.image { _ in
-        image.draw(in: CGRect(origin: .zero, size: targetSize))
-    }
-
-    // App Group への書き込み
-    let url = AppGroup.latestQRImageURL
-    guard let data = resizedImage.pngData() else { return }
-    
-    do {
-        try data.write(to: url, options: [.atomic])
-        // ウィジェットの更新通知
-        WidgetCenter.shared.reloadAllTimelines()
-        print("✅ Widget image saved successfully")
-    } catch {
-        print("❌ Widget image save failed: \(error)")
-    }
-}
-
-// MARK: 画像からQRコードの文字列を抽出
-func scanQRCode(from image: UIImage) -> String {
-    guard let ciImage = CIImage(image: image) else { return "" }
-    
-    // QRコード検出器を作成
-    let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])
-    
-    // 文字列を抽出
-    let features = detector?.features(in: ciImage) as? [CIQRCodeFeature]
-    return features?.first?.messageString ?? ""
-}
-
-// MARK: UI ヘルパー
-struct EmptyIconView: View {
-    var systemImageName: String = "qrcode"
-    var size: CGFloat = 64
-    var color: Color = .gray
-    
-    var body: some View {
-        Image(systemName: systemImageName)
-            .font(.system(size: size))
-            .foregroundColor(color)
-    }
-}
-
-// MARK: 共有画面（UIKitのUIActivityViewControllerをSwiftUIで使う）
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
-
-// MARK: 空状態
-struct EmptyTextView: View {
-    var title: String = "QRコードがまだありません"
-    var subtitle: String = "写真からQRコードを読み取り\n一覧に保存できます。"
-    var maxWidth: CGFloat = 250
-    
-    var body: some View {
-        VStack(spacing: 4) {
-            Text(title)
-                .font(.headline)
-                .multilineTextAlignment(.center)
-            
-            Text(subtitle)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: maxWidth)
-    }
-}
-
-// MARK: 空状態ボックスQR
-struct EmptyStateBoxView: View {
-    var systemImageName: String = "qrcode"
-    var iconSize: CGFloat = 64
-    var boxWidth: CGFloat = 250
-    var boxHeight: CGFloat = 250
-    var title: String = "QRコードがまだありません"
-    var subtitle: String = "写真からQRコードを読み取り\n一覧に保存できます。"
-
-    var body: some View {
-        ZStack {
-            Color(.systemBackground)
-                .ignoresSafeArea()
-
-            VStack(spacing: 0) {
-                Spacer()
-                EmptyIconView(systemImageName: systemImageName, size: iconSize, color: .gray)
-                EmptyTextView(title: title, subtitle: subtitle, maxWidth: boxWidth)
-                    .fixedSize(horizontal: true, vertical: false)
-                    .padding(.top, 8)
-                Spacer()
-            }
-            .frame(width: boxWidth, height: boxHeight)
-        }
-    }
-}
-
-
-// MARK: ぼかし用
-struct BlurView: UIViewRepresentable {
-    let style: UIBlurEffect.Style
-
-    func makeUIView(context: Context) -> UIVisualEffectView {
-        UIVisualEffectView(effect: UIBlurEffect(style: style))
-    }
-
-    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {}
-}
-
-// MARK: グリッド
-struct StaticGrid: View {
-    @Binding var items: [QRGridItemModel]
-    let selectedSwapItemID: UUID?
-    let lastSwappedIDs: Set<UUID>
-    let selectedItems: Set<UUID>
-    let onItemTap: (QRGridItemModel) -> Void
-    let onItemLongPress: (QRGridItemModel) -> Void
-    let columns: Int
-
-    var body: some View {
-        VStack(spacing: 16) {
-            let rows = stride(from: 0, to: items.count, by: columns).map {
-                Array(items[$0..<min($0 + columns, items.count)])
-            }
-
-            ForEach(rows.indices, id: \.self) { index in
-                QRGridRowView(
-                    items: rows[index],
-                    selectedSwapItemID: selectedSwapItemID,
-                    lastSwappedIDs: lastSwappedIDs,
-                    selectedItems: selectedItems,
-                    onItemTap: onItemTap,
-                    onItemLongPress: onItemLongPress,
-                    columns: columns
-                )
-            }
-        }
-    }
-}
-
-
-
-
 // MARK: メイン構造
 struct MainScreen: View {
     
@@ -694,7 +538,7 @@ private extension MainScreen {
                         self.showPhotoPicker = true
                     },
                 onSave: { image, category, name in
-                    let scannedText = scanQRCode(from: image)
+                    let scannedText = qrManager.scanQRCode(from: image)
                     if let item = editingItem {
                         // ---既存アイテムの更新 (編集モード) ---
                         if let index = qrManager.qrItems.firstIndex(where: { $0.id == item.id }) {
@@ -837,7 +681,7 @@ private extension MainScreen {
                         qrManager.saveQRItems(qrManager.qrItems)
                         
                         // 3. App Group に最新画像保存（ウィジェット用）
-                        saveQRImageToAppGroup(item.image)
+                        qrManager.saveQRImageToAppGroup(item.image)
                     }
                 }
                 
@@ -857,72 +701,3 @@ private extension MainScreen {
         .padding()
     }
 }
-
-// MARK: view拡張
-extension View {
-    @ViewBuilder
-    func `if`<Content: View, Else: View>(_ condition: Bool, transform: (Self) -> Content, else: (Self) -> Else) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            `else`(self)
-        }
-    }
-}
-
-// MARK: 画像の向き制御
-extension UIImage {
-    func fixOrientation() -> UIImage {
-        if self.imageOrientation == .up {
-            return self
-        }
-
-        var transform = CGAffineTransform.identity
-
-        switch self.imageOrientation {
-        case .down, .downMirrored:
-            transform = transform.translatedBy(x: self.size.width, y: self.size.height)
-            transform = transform.rotated(by: .pi)
-        case .left, .leftMirrored:
-            transform = transform.translatedBy(x: self.size.width, y: 0)
-            transform = transform.rotated(by: .pi / 2)
-        case .right, .rightMirrored:
-            transform = transform.translatedBy(x: 0, y: self.size.height)
-            transform = transform.rotated(by: -.pi / 2)
-        default:
-            break
-        }
-
-        switch self.imageOrientation {
-        case .upMirrored, .downMirrored:
-            transform = transform.translatedBy(x: self.size.width, y: 0)
-            transform = transform.scaledBy(x: -1, y: 1)
-        case .leftMirrored, .rightMirrored:
-            transform = transform.translatedBy(x: self.size.height, y: 0)
-            transform = transform.scaledBy(x: -1, y: 1)
-        default:
-            break
-        }
-
-        guard let cgImage = self.cgImage,
-              let colorSpace = cgImage.colorSpace,
-              let ctx = CGContext(data: nil, width: Int(self.size.width), height: Int(self.size.height),
-                                  bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0,
-                                  space: colorSpace, bitmapInfo: cgImage.bitmapInfo.rawValue) else {
-            return self
-        }
-
-        ctx.concatenate(transform)
-
-        switch self.imageOrientation {
-        case .left, .leftMirrored, .right, .rightMirrored:
-            ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: self.size.height, height: self.size.width))
-        default:
-            ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
-        }
-
-        guard let newCgImage = ctx.makeImage() else { return self }
-        return UIImage(cgImage: newCgImage)
-    }
-}
-
