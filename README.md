@@ -1,6 +1,11 @@
 # widgetQR (Project Name: QuickQR)
+![iOS 16.0+](https://img.shields.io/badge/iOS-16.0+-black.svg?style=flat-square&logo=apple)
+![Swift 6.0](https://img.shields.io/badge/Swift-6.0-orange.svg?style=flat-square&logo=swift)
+![SwiftUI](https://img.shields.io/badge/SwiftUI-blue.svg?style=flat-square)
 
 **「出したい時に即、出せる。」** ロック画面やホーム画面から、お気に入りのQRコードをウィジェットから一瞬で表示するiOSアプリです。
+
+[![App Storeからダウンロード](https://img.shields.io/badge/App_Store-Download-blue?logo=apple&logoColor=white&style=for-the-badge)](https://x.gd/NHBif)
 
 ## 📸 スクリーンショット
 
