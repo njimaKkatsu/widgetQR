@@ -1,9 +1,0 @@
-# Xcodeの設定ファイル
-DerivedData/
-*.xcuserstate
-xcuserdata/
-
-# 公開したくないファイルやフォルダ
-QuickQRTests/
-QuickQRUITests/
-**/Info.plist
