@@ -13,6 +13,7 @@
 		6D20B3B62F1294DF003D3276 /* QuickQRWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6D20B3A62F1294DD003D3276 /* QuickQRWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6D20B3BF2F12987F003D3276 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D20B3BE2F12987F003D3276 /* AppGroup.swift */; };
 		6D20B3C02F129880003D3276 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D20B3BE2F12987F003D3276 /* AppGroup.swift */; };
+		6DE875572F535B0800EE7BCC /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 6DE875562F535AF300EE7BCC /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		6DA9D9282F11898C00EE517A /* QuickQR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickQR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DA9D9372F11899000EE517A /* QuickQRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickQRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DA9D9412F11899000EE517A /* QuickQRUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickQRUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DE875562F535AF300EE7BCC /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -179,6 +181,7 @@
 		6DA9D91F2F11898C00EE517A = {
 			isa = PBXGroup;
 			children = (
+				6DE875562F535AF300EE7BCC /* .gitignore */,
 				6D02D42D2F501BA40035B90F /* AppMain */,
 				6D20B3BD2F12983E003D3276 /* QuickQRWidgetExtension.entitlements */,
 				6DA9D92A2F11898C00EE517A /* QuickQR */,
@@ -354,6 +357,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DE875572F535B0800EE7BCC /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
