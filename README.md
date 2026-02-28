@@ -4,7 +4,7 @@
 
 ## 📸 スクリーンショット
 
-| 1. ロック画面 | 2. ウィジェット | 3. 自動切り抜き | 4. アプリ内一覧 |
+| 1. プレビュー表示 | 2. ウィジェット連携 | 3. 自動切り抜き | 4. アプリ内一覧 |
 | :---: | :---: | :---: | :---: |
 | <img src="https://github.com/user-attachments/assets/7b029444-9385-48f8-aed0-3c190249ffcc" width="200"> |  <img src="https://github.com/user-attachments/assets/3da1960f-ff9b-4c12-9cbf-e8f1f30c4aa5" width="200">  | <img src="https://github.com/user-attachments/assets/3bc498d3-fb43-41a8-b4e1-6ccab74d84b8" width="200"> |<img src="https://github.com/user-attachments/assets/41b784eb-5de2-43e0-ab5d-32c0a960e18b" width="200">|
 
@@ -27,5 +27,11 @@ UserDefaults (App Group): アプリとウィジェット間でのデータ共有
 
 Image Storage: QRコード画像は pngData としてアプリ専用のドキュメントディレクトリに直接保存。
 
-## 🎨 デザインのこだわり
+## 🎨 主要なデザインのこだわり
 ウィジェットからアプリへ遷移する際のユーザー体験（UX）を重視し、シンプルかつ直感的なインターフェースを目指しました。
+そして、QRコードを自分で切り取る手間をVisionフレームワークを使用し、画像内のQRコードの検知から切り抜きを一瞬で可能にしました。
+
+## 🖌️ 細かいデザインのこだわり
+QRコードのプレビュー表示の明るさを最大ではなく、最大光量の85%にしています。
+どんな角度から写真を撮っても正面で同じサイズになるように保存されます。
+プライバシーモード機能があるので、ウィジェット表示も任意で隠すことが可能です。
