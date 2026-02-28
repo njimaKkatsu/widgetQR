@@ -59,7 +59,6 @@
 		6D20B3A62F1294DD003D3276 /* QuickQRWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickQRWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D20B3A82F1294DD003D3276 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		6D20B3AA2F1294DD003D3276 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		6D20B3BD2F12983E003D3276 /* QuickQRWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuickQRWidgetExtension.entitlements; sourceTree = "<group>"; };
 		6D20B3BE2F12987F003D3276 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		6D505C172F2B1CC500A393E4 /* .plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = .plist; path = /Users/korekatsu/QuickQR/QuickQR/.plist; sourceTree = "<absolute>"; };
 		6DA9D9282F11898C00EE517A /* QuickQR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickQR.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,7 +182,6 @@
 			children = (
 				6DE875562F535AF300EE7BCC /* .gitignore */,
 				6D02D42D2F501BA40035B90F /* AppMain */,
-				6D20B3BD2F12983E003D3276 /* QuickQRWidgetExtension.entitlements */,
 				6DA9D92A2F11898C00EE517A /* QuickQR */,
 				6D20B3A72F1294DD003D3276 /* Frameworks */,
 				6DA9D9292F11898C00EE517A /* Products */,
